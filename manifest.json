@@ -1,6 +1,7 @@
 {
   "name": "Son Metro",
   "short_name": "Son Metro",
+  "description": "Korku ve bulmaca temalı metro macerası",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#12120e",
