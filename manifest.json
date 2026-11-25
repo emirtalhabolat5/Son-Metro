@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Son Metro</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#12120e;--ink:#d6e2c6;--dim:#7d8872;--blood:#a8352b;--ac:#7aa05f;--panel:#1b1c16;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:inherit}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Lora,Georgia,serif;font-size:18px;line-height:1.6}
+body{min-height:100%;transition:background .8s}
+#app{max-width:620px;margin:0 auto;padding:18px 18px 40px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:'Special Elite',monospace;color:var(--dim);font-size:15px}
+#title{color:var(--ac);transition:color .8s}
+.bar{display:flex;gap:6px;align-items:center}
+.pip{width:10px;height:10px;border-radius:50%;background:var(--blood)}.pip.off{background:#2b2b25}
+button{font:inherit;cursor:pointer;color:var(--ink);background:var(--panel);border:1px solid #3a3d31;border-radius:6px;padding:12px 14px;text-align:left;width:100%;margin-top:10px;min-height:48px}
+button:hover,button:focus-visible{border-color:var(--ac);outline:2px solid var(--ac);outline-offset:1px}
+button.sm{width:auto;font-family:'Special Elite',monospace;font-size:14px;padding:6px 10px;margin:0;min-height:0}
+h1{font-family:'Special Elite',monospace;font-weight:400;font-size:34px;margin:34px 0 4px;letter-spacing:.02em}
+h2{font-family:'Special Elite',monospace;font-weight:400;font-size:24px;margin:26px 0 8px;color:var(--ac);transition:color .8s}
+p{margin:0 0 14px}
+.note{font-family:'Special Elite',monospace;background:#e6dcc0;color:#2a241a;padding:12px 14px;border-radius:3px;transform:rotate(-.6deg);margin:14px 0;font-size:16px}
+.sys{color:var(--dim);font-style:italic}
+.bad{color:var(--blood)}
+input{font:inherit;width:100%;padding:12px;margin-top:8px;background:#0c0c09;color:var(--ink);border:1px solid #3a3d31;border-radius:6px}
+#notes{display:none;background:var(--panel);border:1px solid #3a3d31;border-radius:6px;padding:4px 14px;margin-top:12px}
+#notes .note{transform:none;margin:10px 0}
+header{flex-wrap:wrap}.art{display:block;width:100%;height:auto;border-radius:6px;border:1px solid #3a3d31;margin:10px 0 14px}
+.glitch{animation:g 3s steps(2,end) infinite}
+@keyframes g{0%,92%,100%{transform:none}94%{transform:translateX(-3px)}96%{transform:translateX(3px);color:var(--blood)}}
+@media (prefers-reduced-motion:reduce){.glitch{animation:none}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><span id="title">Son Metro</span><span class="bar"><span id="hp"></span><button class="sm" id="nb">Notlar (0)</button><button class="sm" id="rb">Baştan başla</button></span></header>
+<div id="notes"></div>
+<main id="txt"></main>
+<div id="btns"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const S=[
+{n:`İstasyon 1: Orman`,c:`#7aa05f`,
+intro:`Kapılar sessizce açılıyor. Platformun karo zemini yosunla kaplı, tavanı ise ağaç dallarından örülmüş. Metronun içinde kimse yok. Ceplerinde bilet yerine bir fotoğraf parçası var: bir elin yırtık hali. Hoparlör cızırdıyor: “Bir sonraki durak: burası.”`,
+ins:`Duvardaki ağaç gövdesinde derin çizikler var.`,
+note:`Gövdeye kazınmış: “3 kuş sustu. 1 kurt baktı. 4 gölge yürüdü. Sayıları sırayla say, kapı seni dinler.”`,
+cr:{name:`Kök Adam`,txt:`Ağaçların arasından, gövdesi köklerle örülmüş bir adam çıkıyor. Yüzü yok, ama sana doğru eğiliyor. Nefes alırken toprak kokuyor.`,note:`Köklerin arasında bir kâğıt: “Beni de buraya bıraktılar. Aileni arama, seni o buluyor.”`},
+pz:{q:`Çıkış kapısında üç haneli bir kilit var.`,ans:`314`,ph:`Sayıları gir`,ok:`Kilit tıkırdıyor. Kapı açılırken ağaçlar fısıldıyor: “Git, ama seni unutmayacağız.”`}},
+{n:`İstasyon 2: Okyanus`,c:`#4f9aa6`,
+intro:`Tünel bitiyor ve peron bir cam kubbenin altında. Dışarıda okyanus var. Dev bir balık camın önünden geçiyor, gözleri insan gözü. Saatler hep aynı dakikayı gösteriyor: 03:03. Ayakkabını suyun içinde buluyorsun, ama sen kuru duruyorsun.`,
+ins:`Cam bir kutunun içinde eski bir bilmece levhası var.`,
+note:`Levhada yazıyor: “Beni beslersen yaşarım, bana su verirsen ölürüm. Adım nedir?” Altında küçük bir not: “Bizim adımız da aynıydı.”`,
+cr:{name:`Boğulmuş Yolcu`,txt:`Peronun kenarından ıslak bir el tutunuyor. Sonra bir adam çıkıyor. Ağzı açık, ama sesi yok. Her adımında ayaklarının altında deniz suyu birikiyor.`,note:`Cebinde ıslak bir bilet: “Son Metro. Kalkış: hiçbir zaman. Varış: sen.”`},
+pz:{q:`Kapının üstünde bir tane yazı alanı var. Bilmecenin cevabını bekliyor.`,ans:`ates`,ph:`Cevabın nedir?`,ok:`Kapı açılırken cam kubbeden bir çatlak sesi geliyor. Koş. Arkana bakma.`}},
+{n:`İstasyon 3: Terk Edilmiş Peron`,c:`#9a9a8c`,
+intro:`Bu istasyon sanki yıllardır kapalı. Floresanlar titriyor, bankların üzerinde toz yerine kül var. Duvarlarda senin adın yazılı, onlarca kez, farklı el yazılarıyla. Zeminde bir çocuk oyuncağı duruyor ve hâlâ ılık.`,
+ins:`Eski bir anons tabelasında sayılar yazılı.`,
+note:`Tabela: “2, 6, 12, 20, … Kaçıncı kez buradan geçiyorsun? Sayı hep aynı yere varıyor.” Altına birisi kazımış: “Sonraki sayı çıkıştır.”`,
+cr:{name:`Yüzsüz Yolcu`,txt:`Bankın altından, çok uzun uzuvlarıyla bir yolcu sürünerek çıkıyor. Takım elbisesi var, yüzü ise düzgün bir deri parçası. Senin sesinle “Kalk, geç kaldın” diyor.`,note:`Takım elbisenin cebinde bir fotoğraf: arka planda sen, önünde gülen bir kadın ve bir çocuk. Yüzler silinmiş.`},
+pz:{q:`Turnikenin ekranında bir sayı bekleniyor.`,ans:`30`,ph:`Sonraki sayı`,ok:`Turnike açılıyor. Yukarıdaki ışıklar bir anda yanıp sönüyor ve tünel yukarı doğru kıvrılıyor.`}},
+{n:`İstasyon 4: Havada Asılı Ada`,c:`#a77bd1`,
+intro:`Merdivenin sonunda gökyüzü var. Peron, bulutların arasında asılı duran bir adanın üstünde. Ters duran ağaçlar, havada yüzen tren vagonları ve uzakta bir kapı: yarım, çerçevesiz, ardında sıcak bir ışık. Yanında ailenin bir ses kaydı çalıyor, ama kelimeleri tersten.`,
+ins:`Kapının önünde üç taş var: Ev, Karanlık, Metro.`,
+note:`Taşların altındaki not: “Önce evi hatırla. Sonra karanlığı kabul et. En son metroyu bırak.”`,
+cr:{name:`Gökyüzü Bekçisi`,txt:`Adanın kenarından, kanatları kemikten bir şey yükseliyor. Çenesi çok geniş, gözleri senin yaşadığın evin pencerelerine benziyor. Sana eğilip kokluyor.`,note:`Bekçinin boynunda eski bir anahtar: “Kapıyı açan, kapıya bakan değil, onu bırakandır.”`},
+pz:{q:`Kapının önünde üç taş var. Hangi sırayla dokunacaksın?`,ans:`seq`,ok:`Taşlar ışıkla doluyor. Kapı açılıyor. Ardında bir silüet duruyor ve elini uzatıyor.`}}
+];
+let st;
+const norm=s=>s.toLocaleLowerCase('tr').trim().replace(/ş/g,'s').replace(/ı/g,'i').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o');
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const odd=[`Hoparlör: “Bir sonraki durak: bu durak.”`,`Tünelde birisi çocuk sesiyle şarkı mırıldanıyor.`,`Işıklar bir an söndü. Açıldığında yanındaki bank yer değiştirmişti.`,`Duvardaki afişte senin yüzün var, altında yazıyor: “KAYIP: hâlâ aranıyor.”`,`Kulağına bir fısıltı: “Ailen seni beklemiyor, onları sen bekliyorsun.”`];
+
+const A=b=>`<svg class="art" viewBox="0 0 320 140" role="img" aria-label="Sahne çizimi" xmlns="http://www.w3.org/2000/svg">${b}</svg>`;
+const floor=`<rect y="104" width="320" height="36" fill="#23251d"/><path d="M0 118H320M0 130H320M80 104V140M200 104V140" stroke="#3a3d31"/><rect y="107" width="320" height="3" fill="#c9b23a"/>`;
+function art(i){return A([
+`<rect width="320" height="140" fill="#0d140c"/><circle cx="262" cy="28" r="14" fill="#d6e2c6" opacity=".8"/><g fill="#1e2f1a"><polygon points="20,104 45,15 70,104"/><polygon points="100,104 130,30 160,104"/><polygon points="200,104 225,10 250,104"/><polygon points="260,104 285,40 310,104"/></g><g fill="#a8352b"><circle cx="125" cy="62" r="2.5"/><circle cx="135" cy="62" r="2.5"/><circle cx="222" cy="50" r="2.5"/><circle cx="230" cy="50" r="2.5"/></g>`+floor,
+`<rect width="320" height="140" fill="#09222a"/><path d="M0 30Q40 15 80 30T160 30T240 30T320 30V0H0Z" fill="#0f3a46"/><path d="M10 104A150 90 0 0 1 310 104" fill="none" stroke="#4f9aa6" stroke-width="3"/><ellipse cx="140" cy="62" rx="38" ry="16" fill="#13465a"/><polygon points="102,62 80,48 80,76" fill="#13465a"/><circle cx="166" cy="58" r="5" fill="#d6e2c6"/><circle cx="167" cy="58" r="2" fill="#09222a"/><text x="232" y="92" font-family="monospace" font-size="14" fill="#d6e2c6">03:03</text>`+floor,
+`<rect width="320" height="140" fill="#161613"/><g fill="#cfd4b8"><rect x="30" y="10" width="50" height="5"/><rect x="135" y="10" width="50" height="5" opacity=".3"/><rect x="240" y="10" width="50" height="5"/></g><g stroke="#6c6c60" stroke-width="3"><path d="M60 92H130M70 92V104M120 92V104"/></g><g fill="#3a3a33"><circle cx="230" cy="96" r="6"/><rect x="225" y="98" width="10" height="6"/></g><text x="150" y="60" font-family="monospace" font-size="12" fill="#8a8a78">SEN SEN SEN SEN</text>`+floor,
+`<rect width="320" height="140" fill="#1c1230"/><g fill="#3a2a5c"><ellipse cx="50" cy="110" rx="50" ry="14"/><ellipse cx="280" cy="118" rx="60" ry="14"/></g><polygon points="90,100 230,100 195,128 125,128" fill="#2c2a2a"/><path d="M110 100V70M110 70l-10-14M110 70l10-14" stroke="#a77bd1" stroke-width="2" fill="none"/><rect x="148" y="52" width="26" height="48" fill="#f0d89a"/><circle cx="262" cy="26" r="3" fill="#d6e2c6"/><circle cx="40" cy="34" r="2" fill="#d6e2c6"/>`
+][i])}
+function creat(i){const e=`<g fill="#a8352b"><circle cx="150" cy="46" r="3"/><circle cx="170" cy="46" r="3"/></g>`;return A(`<rect width="320" height="140" fill="#0b0b09"/>`+[
+`<path d="M160 130V70M160 70l-30-30M160 70l30-34M160 100l-40 20M160 100l40 20" stroke="#2a3a22" stroke-width="8" fill="none"/><circle cx="160" cy="54" r="22" fill="#2a3a22"/>`,
+`<ellipse cx="160" cy="70" rx="26" ry="50" fill="#10343f"/><circle cx="160" cy="46" r="22" fill="#10343f"/><g fill="#4f9aa6"><circle cx="130" cy="108" r="3"/><circle cx="190" cy="114" r="3"/><circle cx="160" cy="128" r="3"/></g><ellipse cx="160" cy="62" rx="8" ry="12" fill="#000"/>`,
+`<rect x="128" y="60" width="64" height="70" fill="#2d2d29"/><path d="M160 68L152 130H168Z" fill="#a8352b"/><circle cx="160" cy="42" r="22" fill="#b9a58a"/><path d="M128 70L90 130M192 70L230 130" stroke="#2d2d29" stroke-width="7"/>`,
+`<path d="M160 40L60 20L90 70L140 90ZM160 40L260 20L230 70L180 90Z" fill="#d8d2c0"/><ellipse cx="160" cy="70" rx="20" ry="40" fill="#2a1a40"/><circle cx="160" cy="46" r="18" fill="#2a1a40"/><path d="M146 56Q160 78 174 56" stroke="#d6e2c6" fill="none" stroke-width="2"/>`
+][i]+(i==2?'':e))}
+function hpBar(){$('hp').innerHTML=Array.from({length:5},(_,i)=>`<span class="pip ${i<st.hp?'':'off'}" style="display:inline-block;margin-left:3px"></span>`).join('')}
+function theme(){const s=S[st.i];document.documentElement.style.setProperty('--ac',s.c);$('title').textContent=s.n.split(':')[0]}
+function show(html,btns){
+  $('txt').innerHTML=html;hpBar();
+  $('btns').innerHTML='';
+  btns.forEach(([l,f])=>{const b=document.createElement('button');b.textContent=l;b.onclick=f;$('btns').appendChild(b)});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function addNote(t){if(!st.notes.includes(t)){st.notes.push(t);renderNotes()}}
+function renderNotes(){$('nb').textContent=`Notlar (${st.notes.length})`;$('notes').innerHTML=st.notes.length?st.notes.map(n=>`<div class="note">${n}</div>`).join(''):`<p class="sys">Henüz not bulmadın.</p>`}
+let rc=0;$('rb').onclick=()=>{if(rc){clearTimeout(rc);rc=0;$('rb').textContent='Baştan başla';$('notes').style.display='none';intro()}else{$('rb').textContent='Emin misin? Tekrar dokun';rc=setTimeout(()=>{rc=0;$('rb').textContent='Baştan başla'},3000)}};
+$('nb').onclick=()=>{const n=$('notes');n.style.display=n.style.display==='block'?'none':'block'};
+
+function intro(){
+  st={i:0,hp:5,kills:0,mercy:0,done:{},notes:[]};renderNotes();hpBar();
+  $('title').textContent=`Son Metro`;document.documentElement.style.setProperty('--ac','#7aa05f');
+  show(`<h1 class="glitch">SON METRO</h1>${A(`<rect width="320" height="140" fill="#07080a"/><circle cx="290" cy="70" r="26" fill="#d6e2c6" opacity=".15"/><rect x="20" y="50" width="220" height="50" rx="10" fill="#2b2f26"/><g fill="#cfd4b8"><rect x="34" y="60" width="30" height="20"/><rect x="78" y="60" width="30" height="20" opacity=".3"/><rect x="122" y="60" width="30" height="20"/><rect x="166" y="60" width="30" height="20"/></g><g fill="#a8352b"><circle cx="210" cy="68" r="3"/><circle cx="222" cy="68" r="3"/></g><path d="M0 108H320" stroke="#3a3d31" stroke-width="3"/><g fill="#12120e"><circle cx="60" cy="102" r="6"/><circle cx="200" cy="102" r="6"/></g>`)}<p class="sys">Korku, gerilim, araştırma. Seçimlerin sonu değiştirir.</p>
+  <p>Bir metro vagonunda uyanıyorsun. Son durak anonsu çalıyor ama vagonun tabelasında istasyon adı yok. Telefonun kapalı. Cebinde yırtık bir fotoğraf var ve fotoğrafta üç kişi duruyor: ikisinin yüzleri solmuş, biri sensin.</p>
+  <p>Dört istasyon var. Her birinden çıkış bulman gerekiyor. Kapıdaki bilmeceleri çözmek için çevreyi incele ve notları oku. Canavarlarla savaşabilir ya da onlara merhamet gösterebilirsin.</p>`,
+  [[`Metrodan in`,()=>arrive(0)]]);
+}
+function arrive(i){st.i=i;theme();const s=S[i];
+  show(`<h2>${s.n}</h2>${art(i)}<p>${s.intro}</p>`,[[`Devam et`,()=>hub()]]);
+}
+function hub(msg){
+  const s=S[st.i],d=st.done[st.i]||{};
+  const b=[];
+  if(!d.ins)b.push([`Çevreyi incele`,()=>{d.ins=1;st.done[st.i]=d;addNote(s.note);show(`<p>${s.ins}</p><div class="note">${s.note}</div><p class="sys">Not, defterine eklendi.</p>`,[[`Geri dön`,()=>hub()]])}]);
+  if(!d.cr)b.push([`Karanlığa doğru yürü`,()=>{d.cr=1;st.done[st.i]=d;enc()}]);
+  b.push([`Çıkış kapısına git`,()=>pz()]);
+  show(`<h2>${s.n}</h2>${art(st.i)}${msg?`<p>${msg}</p>`:`<p class="sys">${rnd(odd)}</p>`}<p>Çıkış kapısı önünde. Ne yapacaksın?</p>`,b);
+}
+function pz(){
+  const s=S[st.i],p=s.pz;
+  if(p.ans==='seq'){
+    let seq=[];const opts=[`Ev`,`Karanlık`,`Metro`];
+    const draw=()=>{show(`<h2>${s.n}</h2><p>${p.q}</p><p class="sys">Seçtiğin sıra: ${seq.length?seq.join(` → `):`henüz yok`}</p>`,
+      [...opts.filter(o=>!seq.includes(o)).map(o=>[o,()=>{seq.push(o);if(seq.length<3)draw();else if(seq.join()==='Ev,Karanlık,Metro')solved();else{st.hp=Math.max(1,st.hp-1);seq=[];show(`<p class="bad">Taşlar kararıyor. Yerden bir el uzanıp bileğini sıkıyor. (-1 can)</p><p>Sıra yanlıştı. Notu tekrar oku.</p>`,[[`Tekrar dene`,()=>draw()],[`Geri dön`,()=>hub()]])}}]),[`Geri dön`,()=>hub()]])};
+    draw();return;
+  }
+  show(`<h2>${s.n}</h2><p>${p.q}</p><input id="a" placeholder="${p.ph}" autocomplete="off" aria-label="${p.ph}">`,
+    [[`Dene`,()=>{if(norm($('a').value)===p.ans)solved();else{st.hp=Math.max(1,st.hp-1);show(`<p class="bad">Yanlış. Duvarlar bir an seninle birlikte nefes alıyor. (-1 can)</p>`,[[`Tekrar dene`,()=>pz()],[`Geri dön`,()=>hub()]])}}],[`Geri dön`,()=>hub()]]);
+}
+function solved(){
+  const s=S[st.i];
+  if(st.i<3)show(`<p>${s.pz.ok}</p><p class="sys">Can bir miktar yenilendi.</p>`,[[`Sonraki istasyona geç`,()=>{st.hp=Math.min(5,st.hp+1);arrive(st.i+1)}]]);
+  else finale();
+}
+let cr;
+function enc(){
+  const s=S[st.i];cr={hp:3,n:s.cr.name};
+  show(`<h2>${cr.n}</h2>${creat(st.i)}<p>${s.cr.txt}</p>`,[[`Saldır`,()=>fight()],[`Elini uzat, merhamet göster`,()=>mercy()]]);
+}
+function fight(log=''){
+  const s=S[st.i];
+  const hit=Math.random()<.75,hurt=Math.random()<.55;
+  if(hit)cr.hp--;if(hurt)st.hp--;
+  let t=(hit?`Darbe indi, ${cr.n} geri çekiliyor. `:`Iskaladın. `)+(hurt?`Sana pençeyi geçirdi (-1 can).`:`Senden kaçtı.`);
+  if(cr.hp<=0){st.kills++;addNote(s.cr.note);
+    show(`<p>${t}</p><p class="bad">${cr.n} yere düşüyor ve kıpırdamıyor. Gözlerini kapatırken insan sesiyle “teşekkür ederim” diyor. Ellerin titriyor.</p><div class="note">${s.cr.note}</div>`,[[`Devam et`,()=>st.hp<=0?faint():hub(`${cr.n} artık yok. Platform eskisinden daha sessiz.`)]]);return}
+  if(st.hp<=0)return faint();
+  show(`<h2>${cr.n}</h2><p>${t}</p><p class="sys">Yaratığın canı: ${'●'.repeat(cr.hp)}${'○'.repeat(3-cr.hp)}</p>`,[[`Saldır`,()=>fight()],[`Merhamet göster`,()=>mercy()]]);
+}
+function mercy(){
+  const s=S[st.i];st.mercy++;st.hp=Math.max(1,st.hp-1);addNote(s.cr.note);
+  show(`<p>Elini uzatıyorsun. ${cr.n} seni uzun uzun süzüyor, sonra karanlığa çekiliyor. Çekerken pençesi omzunu yırtıyor, ama sana zarar vermek istemiyordu. (-1 can)</p><div class="note">${s.cr.note}</div>`,[[`Devam et`,()=>hub()]]);
+}
+function faint(){
+  st.hp=3;show(`<p class="bad">Gözlerin kararıyor.</p><p>Sonra yeniden açıyorsun. Aynı peron, aynı soğuk karo. Yarana bakıyorsun ama yara yok. Birisi seni buraya geri koymuş.</p>`,[[`Ayağa kalk`,()=>hub()]]);
+}
+function finale(){
+  const k=st.kills;
+  show(`<h2>Kapının Ardı</h2><p>${S[3].pz.ok}</p><p>Silüet yaklaşıyor. Annenin gülüşü, babanın kısık sesi, kardeşinin elinde senin eski oyuncağın. Hepsi gerçek görünüyor. Ama arkandaki yaratıkların ayak sesleri hâlâ duyuluyor.</p>
+  <p class="sys">${k>=2?`Ellerinde kuruyan kan var. ${k} kez öldürdün.`:`Ellerin temiz. Merhamet gösterdin.`}</p>`,
+  [[`Elini tut`,()=>k>=2?bad(1):good()],[`Bu bir tuzak. Saldır`,()=>bad(2)]]);
+}
+function good(){
+  show(`<h2>İyi Son: Ev</h2>${A(`<rect width="320" height="140" fill="#1a1410"/><rect x="90" y="40" width="140" height="80" fill="#3a2a1c"/><polygon points="80,42 160,6 240,42" fill="#5a3a24"/><rect x="135" y="60" width="50" height="60" fill="#f5d68a"/><rect x="105" y="58" width="22" height="22" fill="#f5d68a"/><rect x="193" y="58" width="22" height="22" fill="#f5d68a"/><path d="M0 120H320" stroke="#5a3a24" stroke-width="4"/>`)}<p>Eli tutuyorsun. Sıcak, tanıdık, gerçek. Kapının ardında bir mutfak var: çay kokusu, fırında kurabiye. Annen sarılıyor, babanın gözleri doluyor.</p><p>Metro arkanda sessizce kayboluyor.</p>`,
+  [[`Devam et`,()=>fam(0)]]);
+}
+const F=[`<h2>Aile Yemeği</h2><p>Masada senin yerin ayrılmış. Kardeşin sana yanlış bardağı veriyor, hepiniz gülüyorsunuz. Annen “Ne kadar zayıflamışsın” diyor ve tabağını doldurmaya devam ediyor.`,
+`<p>Babanın anlattığı eski hikâyeyi dinliyorsun, yüzüncü kez ama bu sefer her kelimeyi tutmak istiyorsun. Pencerenin dışında sokak lambaları yanıyor. Normal bir akşam. En güzel akşam.</p>`,
+`<p>Sonra hep birlikte mutfağı topluyorsunuz. Telefonun çalıyor: ekranda tek mesaj var: “Eve hoş geldin.” Gülümsüyorsun, telefonu kapatıp masaya bırakıyorsun.</p><p class="sys">SON</p>`];
+function fam(i){show(F[i],i<2?[[`Devam et`,()=>fam(i+1)]]:[[`Yeniden oyna`,intro]])}
+function bad(t){
+  const k=st.kills;
+  show(`<h2 class="bad">Kötü Son: Son Yolcu</h2>${A(`<rect width="320" height="140" fill="#070606"/><g fill="#a8352b"><circle cx="60" cy="50" r="4"/><circle cx="76" cy="50" r="4"/><circle cx="150" cy="80" r="4"/><circle cx="166" cy="80" r="4"/><circle cx="240" cy="40" r="4"/><circle cx="256" cy="40" r="4"/><circle cx="110" cy="110" r="3"/><circle cx="122" cy="110" r="3"/><circle cx="210" cy="108" r="3"/><circle cx="222" cy="108" r="3"/></g>`)}
+  <p>${t===1?`Eli tutuyorsun ama el, bir kök gibi bileğini sarıyor. Aile silüeti çözülüyor ve arkasında, yüzü olmayan başka yüzler beliriyor. Hepsi öldürdüğün şeylerin yüzleri.`:`Saldırıyorsun. Silüet çığlık atmıyor, sadece sana bakıyor. Ardından “biz de böyleydik” diyor ve parçalanıyor.`}</p>
+  <p>Arkandan yaratıkların sesleri yükseliyor. Onları artık boğazına kadar tanıyorsun. ${k>=2?`${k} yaratığı öldürdün, ama ölmediler. Hepsi içinde yaşıyor.`:`Merhamet gösterdin ama son anda korkuya kapıldın.`}</p>
+  <p>Cildin sertleşiyor, gözlerin birbirinden uzaklaşıyor. Metro yeniden hareket ediyor. İlk kez yolcu değilsin: <span class="bad">duraklarda bekleyen yaratıksın.</span></p>
+  <p class="sys">Bir sonraki durak: burası.</p>`,[[`Yeniden oyna`,intro]]);
+}
+intro();
+</script>
+</body>
+</html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Son Metro</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#12120e;--ink:#d6e2c6;--dim:#7d8872;--blood:#a8352b;--ac:#7aa05f;--panel:#1b1c16;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:inherit}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Lora,Georgia,serif;font-size:18px;line-height:1.6}
+body{min-height:100%;transition:background .8s}
+#app{max-width:620px;margin:0 auto;padding:18px 18px 40px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:'Special Elite',monospace;color:var(--dim);font-size:15px}
+#title{color:var(--ac);transition:color .8s}
+.bar{display:flex;gap:6px;align-items:center}
+.pip{width:10px;height:10px;border-radius:50%;background:var(--blood)}.pip.off{background:#2b2b25}
+button{font:inherit;cursor:pointer;color:var(--ink);background:var(--panel);border:1px solid #3a3d31;border-radius:6px;padding:12px 14px;text-align:left;width:100%;margin-top:10px;min-height:48px}
+button:hover,button:focus-visible{border-color:var(--ac);outline:2px solid var(--ac);outline-offset:1px}
+button.sm{width:auto;font-family:'Special Elite',monospace;font-size:14px;padding:6px 10px;margin:0;min-height:0}
+h1{font-family:'Special Elite',monospace;font-weight:400;font-size:34px;margin:34px 0 4px;letter-spacing:.02em}
+h2{font-family:'Special Elite',monospace;font-weight:400;font-size:24px;margin:26px 0 8px;color:var(--ac);transition:color .8s}
+p{margin:0 0 14px}
+.note{font-family:'Special Elite',monospace;background:#e6dcc0;color:#2a241a;padding:12px 14px;border-radius:3px;transform:rotate(-.6deg);margin:14px 0;font-size:16px}
+.sys{color:var(--dim);font-style:italic}
+.bad{color:var(--blood)}
+input{font:inherit;width:100%;padding:12px;margin-top:8px;background:#0c0c09;color:var(--ink);border:1px solid #3a3d31;border-radius:6px}
+#notes{display:none;background:var(--panel);border:1px solid #3a3d31;border-radius:6px;padding:4px 14px;margin-top:12px}
+#notes .note{transform:none;margin:10px 0}
+header{flex-wrap:wrap}.art{display:block;width:100%;height:auto;border-radius:6px;border:1px solid #3a3d31;margin:10px 0 14px}
+.glitch{animation:g 3s steps(2,end) infinite}
+@keyframes g{0%,92%,100%{transform:none}94%{transform:translateX(-3px)}96%{transform:translateX(3px);color:var(--blood)}}
+@media (prefers-reduced-motion:reduce){.glitch{animation:none}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><span id="title">Son Metro</span><span class="bar"><span id="hp"></span><button class="sm" id="nb">Notlar (0)</button><button class="sm" id="rb">Baştan başla</button></span></header>
+<div id="notes"></div>
+<main id="txt"></main>
+<div id="btns"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const S=[
+{n:`İstasyon 1: Orman`,c:`#7aa05f`,
+intro:`Kapılar sessizce açılıyor. Platformun karo zemini yosunla kaplı, tavanı ise ağaç dallarından örülmüş. Metronun içinde kimse yok. Ceplerinde bilet yerine bir fotoğraf parçası var: bir elin yırtık hali. Hoparlör cızırdıyor: “Bir sonraki durak: burası.”`,
+ins:`Duvardaki ağaç gövdesinde derin çizikler var.`,
+note:`Gövdeye kazınmış: “3 kuş sustu. 1 kurt baktı. 4 gölge yürüdü. Sayıları sırayla say, kapı seni dinler.”`,
+cr:{name:`Kök Adam`,txt:`Ağaçların arasından, gövdesi köklerle örülmüş bir adam çıkıyor. Yüzü yok, ama sana doğru eğiliyor. Nefes alırken toprak kokuyor.`,note:`Köklerin arasında bir kâğıt: “Beni de buraya bıraktılar. Aileni arama, seni o buluyor.”`},
+pz:{q:`Çıkış kapısında üç haneli bir kilit var.`,ans:`314`,ph:`Sayıları gir`,ok:`Kilit tıkırdıyor. Kapı açılırken ağaçlar fısıldıyor: “Git, ama seni unutmayacağız.”`}},
+{n:`İstasyon 2: Okyanus`,c:`#4f9aa6`,
+intro:`Tünel bitiyor ve peron bir cam kubbenin altında. Dışarıda okyanus var. Dev bir balık camın önünden geçiyor, gözleri insan gözü. Saatler hep aynı dakikayı gösteriyor: 03:03. Ayakkabını suyun içinde buluyorsun, ama sen kuru duruyorsun.`,
+ins:`Cam bir kutunun içinde eski bir bilmece levhası var.`,
+note:`Levhada yazıyor: “Beni beslersen yaşarım, bana su verirsen ölürüm. Adım nedir?” Altında küçük bir not: “Bizim adımız da aynıydı.”`,
+cr:{name:`Boğulmuş Yolcu`,txt:`Peronun kenarından ıslak bir el tutunuyor. Sonra bir adam çıkıyor. Ağzı açık, ama sesi yok. Her adımında ayaklarının altında deniz suyu birikiyor.`,note:`Cebinde ıslak bir bilet: “Son Metro. Kalkış: hiçbir zaman. Varış: sen.”`},
+pz:{q:`Kapının üstünde bir tane yazı alanı var. Bilmecenin cevabını bekliyor.`,ans:`ates`,ph:`Cevabın nedir?`,ok:`Kapı açılırken cam kubbeden bir çatlak sesi geliyor. Koş. Arkana bakma.`}},
+{n:`İstasyon 3: Terk Edilmiş Peron`,c:`#9a9a8c`,
+intro:`Bu istasyon sanki yıllardır kapalı. Floresanlar titriyor, bankların üzerinde toz yerine kül var. Duvarlarda senin adın yazılı, onlarca kez, farklı el yazılarıyla. Zeminde bir çocuk oyuncağı duruyor ve hâlâ ılık.`,
+ins:`Eski bir anons tabelasında sayılar yazılı.`,
+note:`Tabela: “2, 6, 12, 20, … Kaçıncı kez buradan geçiyorsun? Sayı hep aynı yere varıyor.” Altına birisi kazımış: “Sonraki sayı çıkıştır.”`,
+cr:{name:`Yüzsüz Yolcu`,txt:`Bankın altından, çok uzun uzuvlarıyla bir yolcu sürünerek çıkıyor. Takım elbisesi var, yüzü ise düzgün bir deri parçası. Senin sesinle “Kalk, geç kaldın” diyor.`,note:`Takım elbisenin cebinde bir fotoğraf: arka planda sen, önünde gülen bir kadın ve bir çocuk. Yüzler silinmiş.`},
+pz:{q:`Turnikenin ekranında bir sayı bekleniyor.`,ans:`30`,ph:`Sonraki sayı`,ok:`Turnike açılıyor. Yukarıdaki ışıklar bir anda yanıp sönüyor ve tünel yukarı doğru kıvrılıyor.`}},
+{n:`İstasyon 4: Havada Asılı Ada`,c:`#a77bd1`,
+intro:`Merdivenin sonunda gökyüzü var. Peron, bulutların arasında asılı duran bir adanın üstünde. Ters duran ağaçlar, havada yüzen tren vagonları ve uzakta bir kapı: yarım, çerçevesiz, ardında sıcak bir ışık. Yanında ailenin bir ses kaydı çalıyor, ama kelimeleri tersten.`,
+ins:`Kapının önünde üç taş var: Ev, Karanlık, Metro.`,
+note:`Taşların altındaki not: “Önce evi hatırla. Sonra karanlığı kabul et. En son metroyu bırak.”`,
+cr:{name:`Gökyüzü Bekçisi`,txt:`Adanın kenarından, kanatları kemikten bir şey yükseliyor. Çenesi çok geniş, gözleri senin yaşadığın evin pencerelerine benziyor. Sana eğilip kokluyor.`,note:`Bekçinin boynunda eski bir anahtar: “Kapıyı açan, kapıya bakan değil, onu bırakandır.”`},
+pz:{q:`Kapının önünde üç taş var. Hangi sırayla dokunacaksın?`,ans:`seq`,ok:`Taşlar ışıkla doluyor. Kapı açılıyor. Ardında bir silüet duruyor ve elini uzatıyor.`}}
+];
+let st;
+const norm=s=>s.toLocaleLowerCase('tr').trim().replace(/ş/g,'s').replace(/ı/g,'i').replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o');
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const odd=[`Hoparlör: “Bir sonraki durak: bu durak.”`,`Tünelde birisi çocuk sesiyle şarkı mırıldanıyor.`,`Işıklar bir an söndü. Açıldığında yanındaki bank yer değiştirmişti.`,`Duvardaki afişte senin yüzün var, altında yazıyor: “KAYIP: hâlâ aranıyor.”`,`Kulağına bir fısıltı: “Ailen seni beklemiyor, onları sen bekliyorsun.”`];
+
+const A=b=>`<svg class="art" viewBox="0 0 320 140" role="img" aria-label="Sahne çizimi" xmlns="http://www.w3.org/2000/svg">${b}</svg>`;
+const floor=`<rect y="104" width="320" height="36" fill="#23251d"/><path d="M0 118H320M0 130H320M80 104V140M200 104V140" stroke="#3a3d31"/><rect y="107" width="320" height="3" fill="#c9b23a"/>`;
+function art(i){return A([
+`<rect width="320" height="140" fill="#0d140c"/><circle cx="262" cy="28" r="14" fill="#d6e2c6" opacity=".8"/><g fill="#1e2f1a"><polygon points="20,104 45,15 70,104"/><polygon points="100,104 130,30 160,104"/><polygon points="200,104 225,10 250,104"/><polygon points="260,104 285,40 310,104"/></g><g fill="#a8352b"><circle cx="125" cy="62" r="2.5"/><circle cx="135" cy="62" r="2.5"/><circle cx="222" cy="50" r="2.5"/><circle cx="230" cy="50" r="2.5"/></g>`+floor,
+`<rect width="320" height="140" fill="#09222a"/><path d="M0 30Q40 15 80 30T160 30T240 30T320 30V0H0Z" fill="#0f3a46"/><path d="M10 104A150 90 0 0 1 310 104" fill="none" stroke="#4f9aa6" stroke-width="3"/><ellipse cx="140" cy="62" rx="38" ry="16" fill="#13465a"/><polygon points="102,62 80,48 80,76" fill="#13465a"/><circle cx="166" cy="58" r="5" fill="#d6e2c6"/><circle cx="167" cy="58" r="2" fill="#09222a"/><text x="232" y="92" font-family="monospace" font-size="14" fill="#d6e2c6">03:03</text>`+floor,
+`<rect width="320" height="140" fill="#161613"/><g fill="#cfd4b8"><rect x="30" y="10" width="50" height="5"/><rect x="135" y="10" width="50" height="5" opacity=".3"/><rect x="240" y="10" width="50" height="5"/></g><g stroke="#6c6c60" stroke-width="3"><path d="M60 92H130M70 92V104M120 92V104"/></g><g fill="#3a3a33"><circle cx="230" cy="96" r="6"/><rect x="225" y="98" width="10" height="6"/></g><text x="150" y="60" font-family="monospace" font-size="12" fill="#8a8a78">SEN SEN SEN SEN</text>`+floor,
+`<rect width="320" height="140" fill="#1c1230"/><g fill="#3a2a5c"><ellipse cx="50" cy="110" rx="50" ry="14"/><ellipse cx="280" cy="118" rx="60" ry="14"/></g><polygon points="90,100 230,100 195,128 125,128" fill="#2c2a2a"/><path d="M110 100V70M110 70l-10-14M110 70l10-14" stroke="#a77bd1" stroke-width="2" fill="none"/><rect x="148" y="52" width="26" height="48" fill="#f0d89a"/><circle cx="262" cy="26" r="3" fill="#d6e2c6"/><circle cx="40" cy="34" r="2" fill="#d6e2c6"/>`
+][i])}
+function creat(i){const e=`<g fill="#a8352b"><circle cx="150" cy="46" r="3"/><circle cx="170" cy="46" r="3"/></g>`;return A(`<rect width="320" height="140" fill="#0b0b09"/>`+[
+`<path d="M160 130V70M160 70l-30-30M160 70l30-34M160 100l-40 20M160 100l40 20" stroke="#2a3a22" stroke-width="8" fill="none"/><circle cx="160" cy="54" r="22" fill="#2a3a22"/>`,
+`<ellipse cx="160" cy="70" rx="26" ry="50" fill="#10343f"/><circle cx="160" cy="46" r="22" fill="#10343f"/><g fill="#4f9aa6"><circle cx="130" cy="108" r="3"/><circle cx="190" cy="114" r="3"/><circle cx="160" cy="128" r="3"/></g><ellipse cx="160" cy="62" rx="8" ry="12" fill="#000"/>`,
+`<rect x="128" y="60" width="64" height="70" fill="#2d2d29"/><path d="M160 68L152 130H168Z" fill="#a8352b"/><circle cx="160" cy="42" r="22" fill="#b9a58a"/><path d="M128 70L90 130M192 70L230 130" stroke="#2d2d29" stroke-width="7"/>`,
+`<path d="M160 40L60 20L90 70L140 90ZM160 40L260 20L230 70L180 90Z" fill="#d8d2c0"/><ellipse cx="160" cy="70" rx="20" ry="40" fill="#2a1a40"/><circle cx="160" cy="46" r="18" fill="#2a1a40"/><path d="M146 56Q160 78 174 56" stroke="#d6e2c6" fill="none" stroke-width="2"/>`
+][i]+(i==2?'':e))}
+function hpBar(){$('hp').innerHTML=Array.from({length:5},(_,i)=>`<span class="pip ${i<st.hp?'':'off'}" style="display:inline-block;margin-left:3px"></span>`).join('')}
+function theme(){const s=S[st.i];document.documentElement.style.setProperty('--ac',s.c);$('title').textContent=s.n.split(':')[0]}
+function show(html,btns){
+  $('txt').innerHTML=html;hpBar();
+  $('btns').innerHTML='';
+  btns.forEach(([l,f])=>{const b=document.createElement('button');b.textContent=l;b.onclick=f;$('btns').appendChild(b)});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function addNote(t){if(!st.notes.includes(t)){st.notes.push(t);renderNotes()}}
+function renderNotes(){$('nb').textContent=`Notlar (${st.notes.length})`;$('notes').innerHTML=st.notes.length?st.notes.map(n=>`<div class="note">${n}</div>`).join(''):`<p class="sys">Henüz not bulmadın.</p>`}
+let rc=0;$('rb').onclick=()=>{if(rc){clearTimeout(rc);rc=0;$('rb').textContent='Baştan başla';$('notes').style.display='none';intro()}else{$('rb').textContent='Emin misin? Tekrar dokun';rc=setTimeout(()=>{rc=0;$('rb').textContent='Baştan başla'},3000)}};
+$('nb').onclick=()=>{const n=$('notes');n.style.display=n.style.display==='block'?'none':'block'};
+
+function intro(){
+  st={i:0,hp:5,kills:0,mercy:0,done:{},notes:[]};renderNotes();hpBar();
+  $('title').textContent=`Son Metro`;document.documentElement.style.setProperty('--ac','#7aa05f');
+  show(`<h1 class="glitch">SON METRO</h1>${A(`<rect width="320" height="140" fill="#07080a"/><circle cx="290" cy="70" r="26" fill="#d6e2c6" opacity=".15"/><rect x="20" y="50" width="220" height="50" rx="10" fill="#2b2f26"/><g fill="#cfd4b8"><rect x="34" y="60" width="30" height="20"/><rect x="78" y="60" width="30" height="20" opacity=".3"/><rect x="122" y="60" width="30" height="20"/><rect x="166" y="60" width="30" height="20"/></g><g fill="#a8352b"><circle cx="210" cy="68" r="3"/><circle cx="222" cy="68" r="3"/></g><path d="M0 108H320" stroke="#3a3d31" stroke-width="3"/><g fill="#12120e"><circle cx="60" cy="102" r="6"/><circle cx="200" cy="102" r="6"/></g>`)}<p class="sys">Korku, gerilim, araştırma. Seçimlerin sonu değiştirir.</p>
+  <p>Bir metro vagonunda uyanıyorsun. Son durak anonsu çalıyor ama vagonun tabelasında istasyon adı yok. Telefonun kapalı. Cebinde yırtık bir fotoğraf var ve fotoğrafta üç kişi duruyor: ikisinin yüzleri solmuş, biri sensin.</p>
+  <p>Dört istasyon var. Her birinden çıkış bulman gerekiyor. Kapıdaki bilmeceleri çözmek için çevreyi incele ve notları oku. Canavarlarla savaşabilir ya da onlara merhamet gösterebilirsin.</p>`,
+  [[`Metrodan in`,()=>arrive(0)]]);
+}
+function arrive(i){st.i=i;theme();const s=S[i];
+  show(`<h2>${s.n}</h2>${art(i)}<p>${s.intro}</p>`,[[`Devam et`,()=>hub()]]);
+}
+function hub(msg){
+  const s=S[st.i],d=st.done[st.i]||{};
+  const b=[];
+  if(!d.ins)b.push([`Çevreyi incele`,()=>{d.ins=1;st.done[st.i]=d;addNote(s.note);show(`<p>${s.ins}</p><div class="note">${s.note}</div><p class="sys">Not, defterine eklendi.</p>`,[[`Geri dön`,()=>hub()]])}]);
+  if(!d.cr)b.push([`Karanlığa doğru yürü`,()=>{d.cr=1;st.done[st.i]=d;enc()}]);
+  b.push([`Çıkış kapısına git`,()=>pz()]);
+  show(`<h2>${s.n}</h2>${art(st.i)}${msg?`<p>${msg}</p>`:`<p class="sys">${rnd(odd)}</p>`}<p>Çıkış kapısı önünde. Ne yapacaksın?</p>`,b);
+}
+function pz(){
+  const s=S[st.i],p=s.pz;
+  if(p.ans==='seq'){
+    let seq=[];const opts=[`Ev`,`Karanlık`,`Metro`];
+    const draw=()=>{show(`<h2>${s.n}</h2><p>${p.q}</p><p class="sys">Seçtiğin sıra: ${seq.length?seq.join(` → `):`henüz yok`}</p>`,
+      [...opts.filter(o=>!seq.includes(o)).map(o=>[o,()=>{seq.push(o);if(seq.length<3)draw();else if(seq.join()==='Ev,Karanlık,Metro')solved();else{st.hp=Math.max(1,st.hp-1);seq=[];show(`<p class="bad">Taşlar kararıyor. Yerden bir el uzanıp bileğini sıkıyor. (-1 can)</p><p>Sıra yanlıştı. Notu tekrar oku.</p>`,[[`Tekrar dene`,()=>draw()],[`Geri dön`,()=>hub()]])}}]),[`Geri dön`,()=>hub()]])};
+    draw();return;
+  }
+  show(`<h2>${s.n}</h2><p>${p.q}</p><input id="a" placeholder="${p.ph}" autocomplete="off" aria-label="${p.ph}">`,
+    [[`Dene`,()=>{if(norm($('a').value)===p.ans)solved();else{st.hp=Math.max(1,st.hp-1);show(`<p class="bad">Yanlış. Duvarlar bir an seninle birlikte nefes alıyor. (-1 can)</p>`,[[`Tekrar dene`,()=>pz()],[`Geri dön`,()=>hub()]])}}],[`Geri dön`,()=>hub()]]);
+}
+function solved(){
+  const s=S[st.i];
+  if(st.i<3)show(`<p>${s.pz.ok}</p><p class="sys">Can bir miktar yenilendi.</p>`,[[`Sonraki istasyona geç`,()=>{st.hp=Math.min(5,st.hp+1);arrive(st.i+1)}]]);
+  else finale();
+}
+let cr;
+function enc(){
+  const s=S[st.i];cr={hp:3,n:s.cr.name};
+  show(`<h2>${cr.n}</h2>${creat(st.i)}<p>${s.cr.txt}</p>`,[[`Saldır`,()=>fight()],[`Elini uzat, merhamet göster`,()=>mercy()]]);
+}
+function fight(log=''){
+  const s=S[st.i];
+  const hit=Math.random()<.75,hurt=Math.random()<.55;
+  if(hit)cr.hp--;if(hurt)st.hp--;
+  let t=(hit?`Darbe indi, ${cr.n} geri çekiliyor. `:`Iskaladın. `)+(hurt?`Sana pençeyi geçirdi (-1 can).`:`Senden kaçtı.`);
+  if(cr.hp<=0){st.kills++;addNote(s.cr.note);
+    show(`<p>${t}</p><p class="bad">${cr.n} yere düşüyor ve kıpırdamıyor. Gözlerini kapatırken insan sesiyle “teşekkür ederim” diyor. Ellerin titriyor.</p><div class="note">${s.cr.note}</div>`,[[`Devam et`,()=>st.hp<=0?faint():hub(`${cr.n} artık yok. Platform eskisinden daha sessiz.`)]]);return}
+  if(st.hp<=0)return faint();
+  show(`<h2>${cr.n}</h2><p>${t}</p><p class="sys">Yaratığın canı: ${'●'.repeat(cr.hp)}${'○'.repeat(3-cr.hp)}</p>`,[[`Saldır`,()=>fight()],[`Merhamet göster`,()=>mercy()]]);
+}
+function mercy(){
+  const s=S[st.i];st.mercy++;st.hp=Math.max(1,st.hp-1);addNote(s.cr.note);
+  show(`<p>Elini uzatıyorsun. ${cr.n} seni uzun uzun süzüyor, sonra karanlığa çekiliyor. Çekerken pençesi omzunu yırtıyor, ama sana zarar vermek istemiyordu. (-1 can)</p><div class="note">${s.cr.note}</div>`,[[`Devam et`,()=>hub()]]);
+}
+function faint(){
+  st.hp=3;show(`<p class="bad">Gözlerin kararıyor.</p><p>Sonra yeniden açıyorsun. Aynı peron, aynı soğuk karo. Yarana bakıyorsun ama yara yok. Birisi seni buraya geri koymuş.</p>`,[[`Ayağa kalk`,()=>hub()]]);
+}
+function finale(){
+  const k=st.kills;
+  show(`<h2>Kapının Ardı</h2><p>${S[3].pz.ok}</p><p>Silüet yaklaşıyor. Annenin gülüşü, babanın kısık sesi, kardeşinin elinde senin eski oyuncağın. Hepsi gerçek görünüyor. Ama arkandaki yaratıkların ayak sesleri hâlâ duyuluyor.</p>
+  <p class="sys">${k>=2?`Ellerinde kuruyan kan var. ${k} kez öldürdün.`:`Ellerin temiz. Merhamet gösterdin.`}</p>`,
+  [[`Elini tut`,()=>k>=2?bad(1):good()],[`Bu bir tuzak. Saldır`,()=>bad(2)]]);
+}
+function good(){
+  show(`<h2>İyi Son: Ev</h2>${A(`<rect width="320" height="140" fill="#1a1410"/><rect x="90" y="40" width="140" height="80" fill="#3a2a1c"/><polygon points="80,42 160,6 240,42" fill="#5a3a24"/><rect x="135" y="60" width="50" height="60" fill="#f5d68a"/><rect x="105" y="58" width="22" height="22" fill="#f5d68a"/><rect x="193" y="58" width="22" height="22" fill="#f5d68a"/><path d="M0 120H320" stroke="#5a3a24" stroke-width="4"/>`)}<p>Eli tutuyorsun. Sıcak, tanıdık, gerçek. Kapının ardında bir mutfak var: çay kokusu, fırında kurabiye. Annen sarılıyor, babanın gözleri doluyor.</p><p>Metro arkanda sessizce kayboluyor.</p>`,
+  [[`Devam et`,()=>fam(0)]]);
+}
+const F=[`<h2>Aile Yemeği</h2><p>Masada senin yerin ayrılmış. Kardeşin sana yanlış bardağı veriyor, hepiniz gülüyorsunuz. Annen “Ne kadar zayıflamışsın” diyor ve tabağını doldurmaya devam ediyor.`,
+`<p>Babanın anlattığı eski hikâyeyi dinliyorsun, yüzüncü kez ama bu sefer her kelimeyi tutmak istiyorsun. Pencerenin dışında sokak lambaları yanıyor. Normal bir akşam. En güzel akşam.</p>`,
+`<p>Sonra hep birlikte mutfağı topluyorsunuz. Telefonun çalıyor: ekranda tek mesaj var: “Eve hoş geldin.” Gülümsüyorsun, telefonu kapatıp masaya bırakıyorsun.</p><p class="sys">SON</p>`];
+function fam(i){show(F[i],i<2?[[`Devam et`,()=>fam(i+1)]]:[[`Yeniden oyna`,intro]])}
+function bad(t){
+  const k=st.kills;
+  show(`<h2 class="bad">Kötü Son: Son Yolcu</h2>${A(`<rect width="320" height="140" fill="#070606"/><g fill="#a8352b"><circle cx="60" cy="50" r="4"/><circle cx="76" cy="50" r="4"/><circle cx="150" cy="80" r="4"/><circle cx="166" cy="80" r="4"/><circle cx="240" cy="40" r="4"/><circle cx="256" cy="40" r="4"/><circle cx="110" cy="110" r="3"/><circle cx="122" cy="110" r="3"/><circle cx="210" cy="108" r="3"/><circle cx="222" cy="108" r="3"/></g>`)}
+  <p>${t===1?`Eli tutuyorsun ama el, bir kök gibi bileğini sarıyor. Aile silüeti çözülüyor ve arkasında, yüzü olmayan başka yüzler beliriyor. Hepsi öldürdüğün şeylerin yüzleri.`:`Saldırıyorsun. Silüet çığlık atmıyor, sadece sana bakıyor. Ardından “biz de böyleydik” diyor ve parçalanıyor.`}</p>
+  <p>Arkandan yaratıkların sesleri yükseliyor. Onları artık boğazına kadar tanıyorsun. ${k>=2?`${k} yaratığı öldürdün, ama ölmediler. Hepsi içinde yaşıyor.`:`Merhamet gösterdin ama son anda korkuya kapıldın.`}</p>
+  <p>Cildin sertleşiyor, gözlerin birbirinden uzaklaşıyor. Metro yeniden hareket ediyor. İlk kez yolcu değilsin: <span class="bad">duraklarda bekleyen yaratıksın.</span></p>
+  <p class="sys">Bir sonraki durak: burası.</p>`,[[`Yeniden oyna`,intro]]);
+}
+intro();
+</script>
+</body>
+</html>
